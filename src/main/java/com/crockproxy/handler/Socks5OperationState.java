@@ -1,6 +1,9 @@
 package com.crockproxy.handler;
 
-import java.nio.channels.SocketChannel;
+import com.crockproxy.channel.IOBuffer;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by yanshi on 15-3-26.
@@ -8,7 +11,10 @@ import java.nio.channels.SocketChannel;
  */
 public interface Socks5OperationState {
 
-    public void doHandler(SocketChannel socketChannel);
+    public static List<String> IP = Arrays.asList("05", "01", "00", "01");
+    public static List<String> HOST = Arrays.asList("05", "01", "00", "03");
+
+    public void doHandler(IOBuffer buffer);
 
 
     public Socks5OperationState next();

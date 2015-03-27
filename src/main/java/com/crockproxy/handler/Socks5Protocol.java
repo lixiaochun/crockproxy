@@ -1,15 +1,15 @@
 package com.crockproxy.handler;
 
-import java.nio.channels.SocketChannel;
+import com.crockproxy.channel.IOBuffer;
 
 /**
  * Created by yanshi on 15-3-26.
  */
-public class Socks5Protocol {
+public class Socks5Protocol implements Protocol {
 
 
-    private Socks5OperationState socks5OperationState = new Authenitcation();
-    private SocketChannel socketChannel;
+    private Socks5OperationState socks5OperationState = new Authentication();
+    private IOBuffer buffer;
 
 
     public Socks5Protocol() {
@@ -17,7 +17,7 @@ public class Socks5Protocol {
     }
 
     public void doHandler() {
-        socks5OperationState.doHandler(socketChannel);
+        socks5OperationState.doHandler(buffer);
         socks5OperationState = socks5OperationState.next();
     }
 
@@ -25,13 +25,14 @@ public class Socks5Protocol {
         return socks5OperationState == null;
     }
 
-    public void setSocketChannel(SocketChannel socketChannel) {
-        this.socketChannel = socketChannel;
+    @Override
+    public void setBuffer(IOBuffer buffer) {
+        this.buffer = buffer;
     }
 
     public static void main(String[] args) {
         Socks5Protocol protocol = new Socks5Protocol();
-        while (!protocol.isEnd()){
+        while (!protocol.isEnd()) {
             protocol.doHandler();
         }
     }

@@ -1,5 +1,7 @@
 package com.crockproxy;
 
+import com.crockproxy.channel.Session;
+import com.crockproxy.handler.Protocol;
 import com.crockproxy.handler.Socks5Protocol;
 
 import java.io.IOException;
@@ -18,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class NProxySever {
 
     private Selector selector;
-    private Map<SocketChannel, Socks5Protocol> socketChannelSessionMap = new ConcurrentHashMap<SocketChannel, Socks5Protocol>();
+    private Map<SocketChannel, Session> socketChannelSessionMap = new ConcurrentHashMap<SocketChannel, Session>();
 
 
     public void start(int port) {
@@ -46,7 +48,6 @@ public class NProxySever {
                     SelectionKey key = keys.next();
                     keys.remove();
                     process(key);
-
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -62,14 +63,13 @@ public class NProxySever {
                 socketChannel = ((ServerSocketChannel) key.channel()).accept();
                 socketChannel.configureBlocking(false);
                 socketChannel.register(selector, SelectionKey.OP_READ);
-                socketChannelSessionMap.put(socketChannel,new Socks5Protocol());
+                socketChannelSessionMap.put(socketChannel,Session.create(socketChannel, new Socks5Protocol()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else if (key.isReadable()) {
             SocketChannel socketChannel = (SocketChannel) key.channel();
-            Socks5Protocol socks5Protocol = socketChannelSessionMap.get(socketChannel);
-            socks5Protocol.setSocketChannel(socketChannel);
+            Protocol socks5Protocol = socketChannelSessionMap.get(socketChannel).getProtocol();
             socks5Protocol.doHandler();
         }
     }
