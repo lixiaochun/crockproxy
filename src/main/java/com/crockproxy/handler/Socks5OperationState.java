@@ -13,6 +13,7 @@ public interface Socks5OperationState {
 
     public static List<String> IP = Arrays.asList("05", "01", "00", "01");
     public static List<String> HOST = Arrays.asList("05", "01", "00", "03");
+    public static List<String> ANY= Arrays.asList("05", "02", "00", "02");
 
     public void doHandler(IOBuffer buffer);
 
