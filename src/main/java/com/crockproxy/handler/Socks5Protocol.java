@@ -17,6 +17,9 @@ public class Socks5Protocol implements Protocol {
     }
 
     public void doHandler() {
+        if(socks5OperationState==null){
+            return;
+        };
         socks5OperationState.doHandler(buffer);
         socks5OperationState = socks5OperationState.next();
     }

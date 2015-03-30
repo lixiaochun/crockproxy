@@ -33,6 +33,10 @@ public class IOBuffer {
         session.getSocketChannel().write(ByteBuffer.wrap(msg));
     }
 
+    public Session getSession() {
+        return session;
+    }
+
     public List<String> bytesToHexString(byte[] buffer) {
         StringBuffer sb = new StringBuffer(buffer.length);
         String sTemp;

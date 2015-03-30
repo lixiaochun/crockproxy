@@ -20,6 +20,7 @@ public class TestProxyServer {
             while ((line = reader.readLine()) != null) {
                 System.out.println(line);
             }
+            in.close();
 
         }
     }
